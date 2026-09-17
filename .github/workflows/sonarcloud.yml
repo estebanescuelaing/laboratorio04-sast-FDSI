@@ -36,6 +36,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  contents: read
   pull-requests: read
 
 jobs:
@@ -52,12 +53,20 @@ jobs:
           distribution: temurin
           java-version: '21'
 
-      - name: Analyze with SonarCloud
-        uses: SonarSource/sonarcloud-github-action@4006f663ecaf1f8093e8e4abb9227f6041f52216
+      - name: Verify Java version
+        run: java -version
+
+      - name: Run SonarCloud analysis
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args:
-            -Dsonar.projectKey=estebanescuelaing_laboratorio04-sast-FDSI
-            -Dsonar.organization=estebanescuelaing
-          projectBaseDir: .
+        run: |
+          export SONAR_SCANNER_VERSION=7.2.0.5079
+          wget -qO- https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VERSION}-linux-x64.zip > scanner.zip
+          unzip -q scanner.zip
+          export PATH="$PWD/sonar-scanner-${SONAR_SCANNER_VERSION}-linux-x64/bin:$PATH"
+
+          sonar-scanner \
+            -Dsonar.projectKey=estebanescuelaing_laboratorio04-sast-FDSI \
+            -Dsonar.organization=estebanescuelaing \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.token="$SONAR_TOKEN"
