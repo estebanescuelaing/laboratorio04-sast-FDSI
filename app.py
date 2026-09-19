@@ -1,12 +1,18 @@
-import sqlite3
+import subprocess
 
-def login(username, password):
-    connection = sqlite3.connect("users.db")
-    
-    query = "SELECT * FROM users WHERE username='" + username + "' AND password='" + password + "'"
-    
-    result = connection.execute(query)
-    
-    return result.fetchall()
 
-print(login("admin", "123456"))
+def ejecutar_comando(comando):
+    # Vulnerabilidad intencional: Command Injection
+    resultado = subprocess.run(
+        comando,
+        shell=True,
+        capture_output=True,
+        text=True
+    )
+
+    return resultado.stdout
+
+
+if __name__ == "__main__":
+    comando = input("Comando de laboratorio: ")
+    print(ejecutar_comando(comando))
