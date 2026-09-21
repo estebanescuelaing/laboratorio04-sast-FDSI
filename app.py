@@ -1,11 +1,19 @@
 import subprocess
 
 
-def ejecutar_comando(comando):
-    # Vulnerabilidad intencional: Command Injection
+COMANDOS_PERMITIDOS = {
+    "listar": ["python", "--version"],
+    "version": ["python", "--version"]
+}
+
+
+def ejecutar_comando(opcion):
+    if opcion not in COMANDOS_PERMITIDOS:
+        return "Comando no permitido"
+
     resultado = subprocess.run(
-        comando,
-        shell=True,
+        COMANDOS_PERMITIDOS[opcion],
+        shell=False,
         capture_output=True,
         text=True
     )
@@ -14,5 +22,5 @@ def ejecutar_comando(comando):
 
 
 if __name__ == "__main__":
-    comando = input("Comando de laboratorio: ")
-    print(ejecutar_comando(comando))
+    opcion = input("Opción de laboratorio: ")
+    print(ejecutar_comando(opcion))
