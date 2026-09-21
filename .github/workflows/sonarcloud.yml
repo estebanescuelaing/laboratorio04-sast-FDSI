@@ -89,5 +89,5 @@ jobs:
             -Dsonar.projectKey=estebanescuelaing_laboratorio04-sast-FDSI \
             -Dsonar.organization=estebanescuelaing \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.token="$SONAR_TOKEN"
+            -Dsonar.token="$SONAR_TOKEN" \
             -Dsonar.python.coverage.reportPaths=coverage.xml
