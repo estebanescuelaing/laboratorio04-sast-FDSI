@@ -5,10 +5,9 @@ def buscar_usuario(nombre):
     conexion = sqlite3.connect("laboratorio.db")
     cursor = conexion.cursor()
 
-    # Vulnerabilidad intencional: SQL Injection
-    consulta = "SELECT * FROM usuarios WHERE nombre = '" + nombre + "'"
+    consulta = "SELECT * FROM usuarios WHERE nombre = ?"
 
-    cursor.execute(consulta)
+    cursor.execute(consulta, (nombre,))
     resultado = cursor.fetchall()
 
     conexion.close()
